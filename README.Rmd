@@ -1,0 +1,33 @@
+---
+title: "README"
+output: html_document
+date: "2023-10-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(fastqretrieve)
+```
+ 
+## Load example file
+  
+```{r}
+anno <- exampleSRA()
+```
+ 
+Extract only for example naked mole rat
+
+```{r}
+nmr <- anno %>% filter(Organism=="Heterocephalus glaber") %>%
+       select(Run) %>% unlist() %>% as.character()
+```
+  
+## Download FASTQ 
+  
+```{r}
+out <- "/wins/ori/Domenico/comparative_aging/data/naked_mole_rat/"
+```
+
+
+
