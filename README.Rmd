@@ -26,8 +26,13 @@ nmr <- anno %>% filter(Organism=="Heterocephalus glaber") %>%
 ## Download FASTQ 
   
 ```{r}
-out <- "/wins/ori/Domenico/comparative_aging/data/naked_mole_rat/"
+out <- "/wins/ori/Domenico/comparative_aging/data/naked_mole_rat"
 ```
+  
+```{r}
+res <- FASTQretrieve(sra = nmr,out = out)
+```
+
 
 
 
