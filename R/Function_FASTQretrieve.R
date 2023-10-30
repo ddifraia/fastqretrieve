@@ -12,8 +12,10 @@
 #'go to ENA https://www.ebi.ac.uk/ena/, type your sra id of interest
 #'and go down to download and copy the link of the download to see exaclty
 #'how FASTQ files are stored.
+#'@param nproc the number of parallel wget command that you want to operate
+#'default = 5
 
-FASTQretrieve <- function(sra,out,fpt_path="ftp://ftp.sra.ebi.ac.uk/vol1/srr")
+FASTQretrieve <- function(sra,out,fpt_path="ftp://ftp.sra.ebi.ac.uk/vol1/srr",nproc=5)
 {
   #create directory if does not exists
   if(!dir.exists(out)){dir.create(out)}
@@ -23,8 +25,8 @@ FASTQretrieve <- function(sra,out,fpt_path="ftp://ftp.sra.ebi.ac.uk/vol1/srr")
   sra_path <- file.path(out,"sra")
   fastq_path <- file.path(out,"fastq")
 
-  browser()
-
+  #count number of processes
+  n <- 0
   #command
   for (sr in sra) {
     message("Currently downloading ",sr,"...")
@@ -35,8 +37,11 @@ FASTQretrieve <- function(sra,out,fpt_path="ftp://ftp.sra.ebi.ac.uk/vol1/srr")
     ftp_command <- file.path(fpt_path,path1,path2,sr)
 
     #run ftp command
-    command <- paste("(cd ",sra_path,"; ","wget ",ftp_command,") 2>&1 | while read line; do echo -n -e \"\\r$line\"; done",sep = "")
-    res <- system(command,intern = FALSE)
+    command <- paste("(cd ",sra_path,"; ","wget -b",ftp_command,") 2>&1 | while read line; do echo -n -e \"\\r$line\"; done",sep = "")
+    res <- system(command,intern = FALSE,)
+
+    #update n process
+    n <- n + 1
   }
 
   #extract fastq
